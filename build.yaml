@@ -1,0 +1,32 @@
+# Copyright (c) 2026 Mecha Systems
+# SPDX-License-Identifier: BSD-3-Clause
+
+# Firmware images built by CI, one per entry. "keymap" selects
+# config/mecha_comet_keyboard_<keymap>.keymap (default: config/mecha_comet_keyboard.keymap),
+# the other keys are the ones ZMK uses: board, snippet, cmake-args, artifact-name.
+---
+include:
+  - board: mecha_comet_keyboard//zmk
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
+    artifact-name: mecha_comet_keyboard_qwerty_studio
+  - board: mecha_comet_keyboard//zmk
+    artifact-name: mecha_comet_keyboard_qwerty
+
+  - board: mecha_comet_keyboard//zmk
+    keymap: qwertz
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
+    artifact-name: mecha_comet_keyboard_qwertz_studio
+  - board: mecha_comet_keyboard//zmk
+    keymap: qwertz
+    artifact-name: mecha_comet_keyboard_qwertz
+
+  - board: mecha_comet_keyboard//zmk
+    keymap: azerty
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
+    artifact-name: mecha_comet_keyboard_azerty_studio
+  - board: mecha_comet_keyboard//zmk
+    keymap: azerty
+    artifact-name: mecha_comet_keyboard_azerty

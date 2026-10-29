@@ -1,0 +1,37 @@
+# Copyright (c) 2026 Mecha Systems
+# SPDX-License-Identifier: BSD-3-Clause
+
+CONFIG_GPIO=y
+CONFIG_PINCTRL=y
+
+# Fail the build if the image outgrows code_partition instead of overlapping
+# the settings storage.
+CONFIG_USE_DT_CODE_PARTITION=y
+
+CONFIG_ZMK_USB=y
+
+# Settings are kept in storage_partition: 16 sectors of 1 KB.
+CONFIG_FLASH=y
+CONFIG_FLASH_MAP=y
+CONFIG_NVS=y
+CONFIG_SETTINGS=y
+CONFIG_SETTINGS_NVS=y
+CONFIG_SETTINGS_NVS_SECTOR_COUNT=16
+
+# Ten WS2812 LEDs on PTD3, always powered. The brightness is limited because
+# the 5 V input diodes drop about 0.7 V at full white (about 150 mA).
+CONFIG_ZMK_RGB_UNDERGLOW=y
+CONFIG_ZMK_RGB_UNDERGLOW_EXT_POWER=n
+CONFIG_ZMK_RGB_UNDERGLOW_BRT_MAX=50
+# ZMK turns SPI on for underglow. The LEDs here are driven from a GPIO pin.
+CONFIG_SPI=n
+
+# USB identity. The product name is CONFIG_ZMK_KEYBOARD_NAME.
+# TODO: placeholder VID/PID (pid.codes test PID), replace before shipping.
+CONFIG_USB_DEVICE_MANUFACTURER="Mecha Systems"
+CONFIG_USB_DEVICE_VID=0x1209
+CONFIG_USB_DEVICE_PID=0x0001
+
+# Bus powered. bMaxPower is in units of 2 mA.
+CONFIG_USB_SELF_POWERED=n
+CONFIG_USB_MAX_POWER=250
