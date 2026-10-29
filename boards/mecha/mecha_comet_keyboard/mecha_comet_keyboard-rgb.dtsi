@@ -1,0 +1,39 @@
+/*
+ * Copyright (c) 2026 Mecha Systems
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+/*
+ * Ten XL-1615RGBC-WS2812B LEDs in one chain, data in on PTD3, green-red-blue
+ * byte order. The delay-* values are nop counts for a 48 MHz core clock (see
+ * drivers/led_strip/ws2812_gpio_mcxc.c): about 0.4 us high / 1.0 us low for a 0
+ * bit and 0.96 us high / 0.4 us low for a 1 bit, within the datasheet limits.
+ *
+ * The driver locks interrupts while it sends a frame, so
+ * mecha,ws2812-wait-for-i2c names the I2C module of the pointing stick: a frame
+ * is only sent while no transfer is running on it.
+ */
+
+#include <zephyr/dt-bindings/led/led.h>
+
+/ {
+    chosen {
+        zmk,underglow = &led_strip;
+        mecha,ws2812-wait-for-i2c = &i2c0;
+    };
+
+    led_strip: ws2812 {
+        compatible = "worldsemi,ws2812-gpio";
+        gpios = <&gpiod 3 GPIO_ACTIVE_HIGH>;
+        chain-length = <10>;
+        color-mapping = <LED_COLOR_ID_GREEN
+                         LED_COLOR_ID_RED
+                         LED_COLOR_ID_BLUE>;
+        reset-delay = <250>;
+        delay-t0h = <16>;
+        delay-t0l = <41>;
+        delay-t1h = <42>;
+        delay-t1l = <14>;
+    };
+};

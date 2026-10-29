@@ -1,0 +1,13 @@
+file_format: "1"
+id: mecha_comet_keyboard//zmk
+name: Mecha Comet Keyboard Extension
+type: board
+arch: arm
+outputs:
+  - usb
+url: https://mecha.so
+features:
+  - keys
+  - underglow
+  - pointer
+  - studio
