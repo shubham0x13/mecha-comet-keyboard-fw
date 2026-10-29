@@ -1,0 +1,29 @@
+# Copyright (c) 2026 Mecha Systems
+# SPDX-License-Identifier: BSD-3-Clause
+
+config WS2812_STRIP_GPIO_MCXC
+    bool "WS2812 LED strip GPIO bit-bang driver for NXP MCX C"
+    default y
+    depends on DT_HAS_WORLDSEMI_WS2812_GPIO_ENABLED
+    depends on SOC_SERIES_MCXC
+    depends on LED_STRIP
+    depends on !WS2812_STRIP_GPIO
+    help
+      Drives a WS2812 (or compatible) LED strip by bit-banging one GPIO pin
+      from inline assembly that runs from RAM with interrupts locked. The
+      pulse timing assumes a 48 MHz core clock and is set with the delay-*
+      properties of the worldsemi,ws2812-gpio devicetree node.
+
+DT_CHOSEN_WS2812_WAIT_FOR_I2C := mecha,ws2812-wait-for-i2c
+
+config WS2812_STRIP_GPIO_MCXC_WAIT_FOR_I2C
+    bool "Send LED frames only while an I2C bus is idle"
+    default y
+    depends on WS2812_STRIP_GPIO_MCXC
+    depends on I2C
+    depends on $(dt_chosen_enabled,$(DT_CHOSEN_WS2812_WAIT_FOR_I2C))
+    help
+      A frame is sent with interrupts locked for about 0.3 ms. An interrupt-driven
+      I2C transfer that is running during that time can return wrong data. With
+      this option the driver waits, for at most 2 ms, until the I2C module named
+      by the mecha,ws2812-wait-for-i2c chosen property has no transfer running.

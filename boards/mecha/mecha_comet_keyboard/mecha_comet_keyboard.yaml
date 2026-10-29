@@ -1,0 +1,13 @@
+identifier: mecha_comet_keyboard
+name: Mecha Comet Keyboard Extension
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+  - gnuarmemb
+ram: 32
+flash: 128
+supported:
+  - gpio
+  - usb_device
+vendor: mecha

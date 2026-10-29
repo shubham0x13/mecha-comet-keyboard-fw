@@ -1,0 +1,8 @@
+board:
+  name: mecha_comet_keyboard
+  full_name: Mecha Comet Keyboard Extension
+  vendor: mecha
+  socs:
+    - name: mcxc243
+      variants:
+        - name: zmk

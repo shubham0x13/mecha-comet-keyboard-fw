@@ -1,0 +1,43 @@
+name: Bug report
+description: Something does not work as described.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Firmware version
+      description: The release tag, or the commit if you built it yourself.
+    validations:
+      required: true
+  - type: dropdown
+    id: layout
+    attributes:
+      label: Keyboard layout
+      options:
+        - QWERTY
+        - QWERTZ
+        - AZERTY
+    validations:
+      required: true
+  - type: dropdown
+    id: studio
+    attributes:
+      label: ZMK Studio
+      options:
+        - Studio build
+        - Build without Studio
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Output of a build with debug.conf, if you have it.
+      render: shell

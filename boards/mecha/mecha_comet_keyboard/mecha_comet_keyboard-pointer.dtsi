@@ -1,0 +1,65 @@
+/*
+ * Copyright (c) 2026 Mecha Systems
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+/*
+ * Pointing stick: X on AIN0 and Y on AIN1 of an ADS1115, read by the
+ * mecha-pivot-pip module and sent to the host as mouse motion by ZMK.
+ */
+
+#include <zephyr/dt-bindings/adc/adc.h>
+
+&i2c0 {
+    status = "okay";
+    pinctrl-0 = <&pinmux_i2c0>;
+    pinctrl-names = "default";
+
+    ads1115: ads1115@48 {
+        compatible = "ti,ads1115";
+        reg = <0x48>;
+        #io-channel-cells = <1>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        /* Single-ended inputs use one bit less than the 16 of the chip. */
+        channel@0 {
+            reg = <0>;
+            zephyr,gain = "ADC_GAIN_1";
+            zephyr,reference = "ADC_REF_INTERNAL";
+            zephyr,vref-mv = <2048>;
+            zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+            zephyr,input-positive = <0>;
+            zephyr,resolution = <15>;
+        };
+
+        channel@1 {
+            reg = <1>;
+            zephyr,gain = "ADC_GAIN_1";
+            zephyr,reference = "ADC_REF_INTERNAL";
+            zephyr,vref-mv = <2048>;
+            zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+            zephyr,input-positive = <1>;
+            zephyr,resolution = <15>;
+        };
+    };
+};
+
+/ {
+    pivot_pip: pivot-pip {
+        compatible = "mecha,pivot-pip";
+        io-channels = <&ads1115 0>, <&ads1115 1>;
+        io-channel-names = "x", "y";
+        full-scale = <80>;
+        deadzone-percent = <6>;
+        recenter-window-percent = <3>;
+        inverted-y;
+        recenter-limit-percent = <5>;
+    };
+
+    pointer_listener: pointer_listener {
+        compatible = "zmk,input-listener";
+        device = <&pivot_pip>;
+    };
+};

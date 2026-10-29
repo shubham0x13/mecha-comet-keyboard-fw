@@ -1,0 +1,23 @@
+/*
+ * Copyright (c) 2026 Mecha Systems
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+/* For a keyboard without the pointing stick board connected. */
+
+&pointer_listener {
+    status = "disabled";
+};
+
+&pivot_pip {
+    status = "disabled";
+};
+
+&ads1115 {
+    status = "disabled";
+};
+
+&i2c0 {
+    status = "disabled";
+};
