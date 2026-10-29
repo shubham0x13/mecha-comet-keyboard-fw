@@ -1,0 +1,12 @@
+# Copyright (c) 2026 Mecha Systems
+# SPDX-License-Identifier: BSD-3-Clause
+
+name: zmk-keyboard-mecha-comet
+build:
+  cmake: .
+  kconfig: Kconfig
+  depends:
+    - mecha-pivot-pip
+  settings:
+    board_root: .
+    snippet_root: .

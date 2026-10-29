@@ -1,0 +1,33 @@
+# Copyright (c) 2026 Mecha Systems
+# SPDX-License-Identifier: BSD-3-Clause
+
+manifest:
+  remotes:
+    - name: zmkfirmware
+      url-base: https://github.com/zmkfirmware
+    - name: zephyrproject-rtos
+      url-base: https://github.com/zephyrproject-rtos
+    - name: mecha-org
+      url-base: https://github.com/mecha-org
+  projects:
+    # ZMK blocks hal_nxp in its own manifest, so it is declared here first.
+    # Keep the revision equal to the one in the ZMK Zephyr fork's west.yml
+    # whenever the zmk revision below is changed.
+    - name: hal_nxp
+      remote: zephyrproject-rtos
+      revision: 9dc7449014a7380355612453b31be479cb3a6833
+      path: modules/hal/nxp
+      groups:
+        - hal
+    - name: zmk
+      remote: zmkfirmware
+      revision: 4dd95d7840eb3d5a3f59bb29fbf1ab054715ef85
+      import: app/west.yml
+    # Pinned to a commit until Pivot Pip has a release tag. Use the tag then.
+    - name: mecha-pivot-pip
+      remote: mecha-org
+      repo-path: mecha-pivot-pip-zephyr
+      revision: 1972e2e27f84f06e5477e9116dbefb7d55101b57
+      path: modules/lib/mecha-pivot-pip
+  self:
+    path: mecha-comet-keyboard-fw

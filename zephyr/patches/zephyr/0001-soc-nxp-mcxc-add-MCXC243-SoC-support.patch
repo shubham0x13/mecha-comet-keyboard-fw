@@ -1,0 +1,109 @@
+Backport of zephyrproject-rtos/zephyr PR #121888 ("soc: nxp: mcxc: add MCXC243
+SoC support") onto the ZMK Zephyr 4.1 fork (v4.1.0+zmk-fixes).
+
+The PR targets Zephyr main, where MCXC devicetree files live in
+dts/arm/nxp/mcx/mcxc/. In the 4.1 fork they live in dts/arm/nxp/, so the
+dtsi is placed there and includes nxp_mcxc_common.dtsi. The /delete-node/ &crc
+from the PR is not needed because the 4.1 common dtsi has no CRC node.
+Drop this patch once ZMK moves to a Zephyr release that contains the PR.
+
+diff --git a/dts/arm/nxp/nxp_mcxc243.dtsi b/dts/arm/nxp/nxp_mcxc243.dtsi
+new file mode 100644
+index 00000000..fca7ae24
+--- /dev/null
++++ b/dts/arm/nxp/nxp_mcxc243.dtsi
+@@ -0,0 +1,24 @@
++/*
++ * Copyright The Zephyr Project Contributors
++ *
++ * SPDX-License-Identifier: Apache-2.0
++ */
++
++/*
++ * MCXC243: 128 KB flash, 32 KB SRAM, on-chip USB voltage regulator.
++ */
++
++#include <nxp/nxp_mcxc_common.dtsi>
++
++/delete-node/ &sram0;
++
++/ {
++	sram0: memory@1fffe000 {
++		compatible = "mmio-sram";
++		reg = <0x1fffe000 DT_SIZE_K(32)>;
++	};
++};
++
++&flash0 {
++	reg = <0 DT_SIZE_K(128)>;
++};
+diff --git a/soc/nxp/mcx/mcxc/Kconfig.soc b/soc/nxp/mcx/mcxc/Kconfig.soc
+index 67948a6d..f72118d9 100644
+--- a/soc/nxp/mcx/mcxc/Kconfig.soc
++++ b/soc/nxp/mcx/mcxc/Kconfig.soc
+@@ -20,6 +20,10 @@ config SOC_MCXC242
+ 	bool
+ 	select SOC_SERIES_MCXC
+ 
++config SOC_MCXC243
++	bool
++	select SOC_SERIES_MCXC
++
+ config SOC_MCXC444
+ 	bool
+ 	select SOC_SERIES_MCXC
+@@ -28,6 +32,7 @@ config SOC
+ 	default "mcxc141" if SOC_MCXC141
+ 	default "mcxc142" if SOC_MCXC142
+ 	default "mcxc242" if SOC_MCXC242
++	default "mcxc243" if SOC_MCXC243
+ 	default "mcxc444" if SOC_MCXC444
+ 
+ config SOC_PART_NUMBER_MCXC141VLH
+@@ -45,6 +50,9 @@ config SOC_PART_NUMBER_MCXC242VLH
+ config SOC_PART_NUMBER_MCXC242VFM
+ 	bool
+ 
++config SOC_PART_NUMBER_MCXC243VFT
++	bool
++
+ config SOC_PART_NUMBER_MCXC444VLH
+ 	bool
+ 
+@@ -57,5 +65,6 @@ config SOC_PART_NUMBER
+ 	default "MCXC141VFM" if SOC_PART_NUMBER_MCXC142VFM
+ 	default "MCXC242VLH" if SOC_PART_NUMBER_MCXC242VLH
+ 	default "MCXC242VFM" if SOC_PART_NUMBER_MCXC242VFM
++	default "MCXC243VFT" if SOC_PART_NUMBER_MCXC243VFT
+ 	default "MCXC444VLH" if SOC_PART_NUMBER_MCXC444VLH
+ 	default "MCXC444VMP" if SOC_PART_NUMBER_MCXC444VMP
+diff --git a/soc/nxp/mcx/soc.yml b/soc/nxp/mcx/soc.yml
+index fef7853a..04c95229 100644
+--- a/soc/nxp/mcx/soc.yml
++++ b/soc/nxp/mcx/soc.yml
+@@ -13,6 +13,7 @@ family:
+     - name: mcxc141
+     - name: mcxc142
+     - name: mcxc242
++    - name: mcxc243
+     - name: mcxc444
+   - name: mcxa
+     socs:
+@@ -42,6 +43,8 @@ runners:
+         - mcxc142
+       - qualifiers:
+         - mcxc242
++      - qualifiers:
++        - mcxc243
+       - qualifiers:
+         - mcxc444
+       - qualifiers:
+@@ -64,6 +67,8 @@ runners:
+         - mcxc142
+       - qualifiers:
+         - mcxc242
++      - qualifiers:
++        - mcxc243
+       - qualifiers:
+         - mcxc444
+       - qualifiers:

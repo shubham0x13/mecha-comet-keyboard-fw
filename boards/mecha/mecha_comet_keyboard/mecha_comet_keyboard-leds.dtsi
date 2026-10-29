@@ -1,0 +1,39 @@
+/*
+ * Copyright (c) 2026 Mecha Systems
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+/*
+ * Three white status LEDs. LED1 and LED2 show the active layer (see
+ * src/layer_leds.c) and LED3 shows Caps Lock through ZMK's LED indicators.
+ */
+
+#include <dt-bindings/zmk/hid_indicators.h>
+
+/ {
+    leds {
+        compatible = "gpio-leds";
+
+        caps_lock_led: caps_lock_led {
+            gpios = <&gpiod 6 GPIO_ACTIVE_HIGH>;
+        };
+
+        layer1_led: layer1_led {
+            gpios = <&gpiod 5 GPIO_ACTIVE_HIGH>;
+        };
+
+        layer2_led: layer2_led {
+            gpios = <&gpiod 4 GPIO_ACTIVE_HIGH>;
+        };
+    };
+
+    indicators {
+        compatible = "zmk,indicator-leds";
+
+        caps_lock_indicator: caps_lock {
+            indicator = <HID_INDICATOR_CAPS_LOCK>;
+            leds = <&caps_lock_led>;
+        };
+    };
+};

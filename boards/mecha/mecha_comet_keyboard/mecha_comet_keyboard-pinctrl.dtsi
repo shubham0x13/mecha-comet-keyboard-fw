@@ -1,0 +1,29 @@
+/*
+ * Copyright (c) 2026 Mecha Systems
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+#include <nxp/mcx/MCXC243VFT-pinctrl.h>
+
+&pinctrl {
+    pinmux_lpuart0: pinmux_lpuart0 {
+        group0 {
+            pinmux = <LPUART0_RX_PTA1>,
+                <LPUART0_TX_PTA2>;
+            drive-strength = "low";
+            slew-rate = "slow";
+        };
+    };
+
+    pinmux_i2c0: pinmux_i2c0 {
+        group0 {
+            pinmux = <I2C0_SCL_PTE24>,
+                <I2C0_SDA_PTE25>;
+            drive-strength = "low";
+            drive-open-drain;
+            bias-pull-up;
+            slew-rate = "fast";
+        };
+    };
+};

@@ -1,0 +1,44 @@
+Add a bcdDevice option to the legacy USB device stack.
+
+The legacy stack always reports the Zephyr kernel version as the device release
+number (bcdDevice). Add USB_DEVICE_BCD_DEVICE so a product can report its own
+version, the same way USB_DEVICE_VID and USB_DEVICE_PID set the IDs. The default
+of zero keeps the kernel version.
+
+The new USB device stack already has usbd_device_set_bcd_device(). The legacy
+stack is deprecated in Zephyr main, so this patch is not meant for upstream.
+Drop it once ZMK moves to the new stack.
+
+diff --git a/subsys/usb/device/Kconfig b/subsys/usb/device/Kconfig
+index 80c71fb1..9863cc95 100644
+--- a/subsys/usb/device/Kconfig
++++ b/subsys/usb/device/Kconfig
+@@ -28,6 +28,14 @@ config USB_DEVICE_PID
+ 	help
+ 	  USB device product ID. MUST be configured by vendor.
+ 
++config USB_DEVICE_BCD_DEVICE
++	hex "USB device release number"
++	default 0x0000
++	range 0x0000 0xffff
++	help
++	  USB device release number (bcdDevice), in binary-coded decimal. Zero
++	  reports the Zephyr kernel version.
++
+ config USB_DEVICE_MANUFACTURER
+ 	string "USB manufacturer name"
+ 	default "ZEPHYR"
+diff --git a/subsys/usb/device/usb_descriptor.c b/subsys/usb/device/usb_descriptor.c
+index 3b6b29de..0134fa5f 100644
+--- a/subsys/usb/device/usb_descriptor.c
++++ b/subsys/usb/device/usb_descriptor.c
+@@ -76,7 +76,8 @@ USBD_DEVICE_DESCR_DEFINE(primary) struct common_descriptor common_desc = {
+ 		.bMaxPacketSize0 = USB_MAX_CTRL_MPS,
+ 		.idVendor = sys_cpu_to_le16((uint16_t)CONFIG_USB_DEVICE_VID),
+ 		.idProduct = sys_cpu_to_le16((uint16_t)CONFIG_USB_DEVICE_PID),
+-		.bcdDevice = sys_cpu_to_le16(USB_BCD_DRN),
++		.bcdDevice = sys_cpu_to_le16(CONFIG_USB_DEVICE_BCD_DEVICE ?
++					     CONFIG_USB_DEVICE_BCD_DEVICE : USB_BCD_DRN),
+ 		.iManufacturer = USB_DESC_MANUFACTURER_IDX,
+ 		.iProduct = USB_DESC_PRODUCT_IDX,
+ 		.iSerialNumber = USB_DESC_SERIAL_NUMBER_IDX,

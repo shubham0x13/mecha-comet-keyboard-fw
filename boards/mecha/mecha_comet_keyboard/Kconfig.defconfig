@@ -1,0 +1,14 @@
+# Copyright (c) 2026 Mecha Systems
+# SPDX-License-Identifier: BSD-3-Clause
+
+if BOARD_MECHA_COMET_KEYBOARD
+
+config ZMK_KEYBOARD_NAME
+    default "Mecha Comet Keyboard Extension"
+
+# The matrix columns PTB16 and PTB17 are on port B, which has no pin
+# interrupts, so the keys are polled.
+config ZMK_KSCAN_MATRIX_POLLING
+    default y
+
+endif # BOARD_MECHA_COMET_KEYBOARD

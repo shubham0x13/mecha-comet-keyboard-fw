@@ -1,0 +1,63 @@
+# Copyright (c) 2026 Mecha Systems
+# SPDX-License-Identifier: BSD-3-Clause
+
+# Applied with "west patch apply" after "west update".
+# After editing a patch file, update its sha256sum here.
+patches:
+  - path: zephyr/0001-soc-nxp-mcxc-add-MCXC243-SoC-support.patch
+    sha256sum: e83dcaaa9484856039aec68de4d8a08ad71c1dd0d11c981842f01889bc49d8d2
+    module: zephyr
+    author: Shubham Patel
+    email: shubham0x13@gmail.com
+    date: 2026-10-19
+    upstreamable: true
+    merge-pr: https://github.com/zephyrproject-rtos/zephyr/pull/121888
+    merge-status: true
+    merge-commit: 0b07590b00ea4e0bd7a5bc5045e82c39a8f1823e
+    merge-date: 2026-10-29
+    apply-command: git apply
+    comments: |
+      Backport of upstream PR 121888 (MCXC243 SoC support), merged in Zephyr
+      main, to the ZMK Zephyr 4.1 fork. Drop once ZMK uses a Zephyr that
+      contains the commit.
+
+  - path: zephyr/0002-adc-ads1x1x-support-several-channels.patch
+    sha256sum: 6118360cb09ac68c45ccb63c7ebeb7f2fec84de1959ae01e45fb6ba55f77d0ca
+    module: zephyr
+    author: Shubham Patel
+    email: shubham0x13@gmail.com
+    date: 2026-10-22
+    upstreamable: true
+    merge-pr: https://github.com/zephyrproject-rtos/zephyr/pull/122444
+    merge-status: false
+    apply-command: git apply
+    comments: |
+      Backport of upstream PR 122444 (ADS1x1x: support several channels) to the
+      ZMK Zephyr 4.1 fork. Needed to read the X and Y axes of the pointing
+      stick on AIN0 and AIN1. Drop once ZMK uses a Zephyr that contains the PR.
+
+  - path: zephyr/0003-usb-device-add-a-bcdDevice-option.patch
+    sha256sum: 7a0ca668c3a8194406bd2b97713b5e9649dadd5529ec5064d075c9fad868d1e0
+    module: zephyr
+    author: Shubham Patel
+    email: shubhamp@ext.mechasystems.com
+    date: 2026-10-30
+    upstreamable: false
+    apply-command: git apply
+    comments: |
+      Lets the keyboard report its firmware version as the USB device release
+      number. The legacy USB stack is deprecated in Zephyr main, so this is not
+      sent upstream. Drop it once ZMK moves to the new stack, which has
+      usbd_device_set_bcd_device().
+
+  - path: hal_nxp/0001-mcxc243-add-cmake-glue-and-pinctrl-header.patch
+    sha256sum: 4b8b04f5b4ba4c725e1e5527eb79253c7b2866c98cbbb7819c9ae46b9a7e2916
+    module: hal_nxp
+    author: Shubham Patel
+    email: shubhamp@ext.mechasystems.com
+    date: 2026-10-19
+    upstreamable: false
+    apply-command: git apply
+    comments: |
+      MCXC243 CMake glue (copied from MCXC242) and the MCXC243VFT pinctrl
+      header for the hal_nxp revision pinned by the ZMK Zephyr fork.

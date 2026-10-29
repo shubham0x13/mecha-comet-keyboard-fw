@@ -1,0 +1,37 @@
+# Copyright (c) 2026 Mecha Systems
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "drivers/Kconfig"
+
+config MECHA_KEYBOARD_LAYER_LEDS
+    bool "Show two layers on the layer LEDs"
+    default y
+    depends on $(dt_nodelabel_enabled,layer1_led) && $(dt_nodelabel_enabled,layer2_led)
+    select LED
+    help
+      Layer LED 1 and layer LED 2 are on while their layer is active.
+
+if MECHA_KEYBOARD_LAYER_LEDS
+
+config MECHA_KEYBOARD_LAYER_LED1_LAYER
+    int "Layer shown on layer LED 1"
+    default 1
+    range 1 31
+    help
+      Layer ID, as used in keymap bindings such as &mo 1.
+
+config MECHA_KEYBOARD_LAYER_LED2_LAYER
+    int "Layer shown on layer LED 2"
+    default 2
+    range 1 31
+    help
+      Layer ID, as used in keymap bindings such as &mo 1.
+
+endif # MECHA_KEYBOARD_LAYER_LEDS
+
+config MECHA_KEYBOARD_ROM_BOOTLOADER
+    bool "Make the bootloader key reboot into the boot ROM"
+    default y
+    depends on SOC_SERIES_MCXC && REBOOT
+    help
+      Without this, the bootloader key only resets the board.
